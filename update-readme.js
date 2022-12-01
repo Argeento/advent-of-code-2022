@@ -40,7 +40,7 @@ axios(`https://adventofcode.com/2022/day/${dayNr}`).then(res => {
   }
 
   const fileContent = `# Advent of Code
-Solutions for [Advent of Code 2020](https://adventofcode.com/2022/) in TypeScript
+Solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeScript
 ## Stars
 ${table}
 ## How to run?
