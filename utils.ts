@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 
-export function getLinesFromFile(file: string): string[] {
-  return readFileSync(file).toString().trim().split('\n')
+export function getLinesFromFile<T extends string>(file: string): T[] {
+  return readFileSync(file).toString().trim().split('\n') as T[]
 }
 
 export function getNumbersFromFile(file: string): number[] {
@@ -12,8 +12,11 @@ export function getNumbersFromFile(file: string): number[] {
     : getLinesFromFile(file).map(line => parseFloat(line))
 }
 
-export function getArray2dFromFile(file: string, splitBy = ''): string[][] {
-  return getLinesFromFile(file).map(line => line.split(splitBy))
+export function getArray2dFromFile<T extends string>(
+  file: string,
+  splitBy = ''
+): T[][] {
+  return getLinesFromFile(file).map(line => line.split(splitBy) as T[])
 }
 
 export function add(a: number, b: number): number {
