@@ -13,5 +13,5 @@ for (const line of lines) {
 
 elves.sort(desc)
 
-console.log(`Part 1: ${elves[0]}`)
-console.log(`Part 2: ${elves.slice(0, 3).reduce(add)}`)
+console.log('Part 1:', elves[0])
+console.log('Part 2:', elves.slice(0, 3).reduce(add))
