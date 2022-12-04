@@ -1,3 +1,4 @@
 Calorie Counting
 Rock Paper Scissors
 Rucksack Reorganization
+Camp Cleanup
