@@ -8,7 +8,7 @@ axios(`https://adventofcode.com/2022/day/${dayNr}`).then(res => {
   const title = res.data.match(/--- Day \d*: (.*) ---/)[1]
   fs.appendFileSync('./puzzle-names.txt', `${title}\n`)
 
-  const data = fs
+  const puzzleNames = fs
     .readFileSync('./puzzle-names.txt')
     .toString()
     .split('\n')
@@ -17,32 +17,47 @@ axios(`https://adventofcode.com/2022/day/${dayNr}`).then(res => {
   const table = createTable(
     [
       ['Day', 'Quest', 'Part 1', 'Part 2'],
-      ...data.map((title, index) => [
+      ...puzzleNames.map((title, index) => [
         index + 1,
         `[${title}][${index + 1}]`,
         ':star:',
         ':star:',
       ]),
-      [dayNr + 1, 'Coming soon...'],
     ],
     { align: ['c', 'c', 'c', 'c'] }
   )
+
+  const codes = puzzleNames.map((title, index) => {
+    const dayNr = index + 1
+    const code = fs
+      .readFileSync(`./day-${dayNr.toString().padStart(2, '0')}/index.ts`)
+      .toString()
+
+    return `
+### Day ${dayNr}: ${title}
+
+Quest: [adventofcode.com/2022/day/${dayNr}](https://adventofcode.com/2022/day/${dayNr}) <br>
+
+\`\`\`ts
+${code}
+\`\`\``
+  })
 
   console.log(table)
 
   const links = []
   for (let i = 1; i <= dayNr; i++) {
     links.push(
-      `[${i}]: https://github.com/Argeento/advent-of-code-2022/tree/main/day-${i
-        .toString()
-        .padStart(2, '0')}`
+      `[${i}]: #day-${i}-${puzzleNames[i - 1].toLowerCase().replace(/ /g, '-')}`
     )
   }
 
-  const fileContent = `# Advent of Code
-Solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeScript
+  const fileContent = `# Advent of Code 2022
+My solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeScript
 ## Stars
 ${table}
+## Solutions
+${codes.join('\n ---')}
 ## How to run?
 Install dependencies:
 \`\`\`shell
