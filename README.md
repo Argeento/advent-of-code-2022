@@ -10,6 +10,7 @@ My solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeSc
 |  2  |   [Rock Paper Scissors][2]   | :star: | :star: |
 |  3  | [Rucksack Reorganization][3] | :star: | :star: |
 |  4  |      [Camp Cleanup][4]       | :star: | :star: |
+|  5  |      [Supply Stacks][5]      | :star: | :star: |
 
 ## Solutions
 
@@ -172,6 +173,55 @@ console.log("Part 1:", fullyOverlapping);
 console.log("Part 2:", anyOverlapping);
 ```
 
+---
+
+### Day 5: Supply Stacks
+
+Quest: [adventofcode.com/2022/day/5](https://adventofcode.com/2022/day/5) <br>
+
+```ts
+import { deepCopy, last, getLinesFromFile } from "../utils";
+
+const CRATE_MOVER_9000 = "CrateMover 9000";
+const CRATE_MOVER_9001 = "CrateMover 9001";
+type Step = { move: number; from: number; to: number };
+
+// Read file
+const lines = getLinesFromFile("./day-05/input.txt", { trim: false });
+const numberOfStacks = (lines[0].length + 1) / 4;
+const heightOfStacks = lines.findIndex((line) => line[1] === "1");
+const stacks: string[][] = new Array(numberOfStacks).fill(0).map(() => []);
+
+for (let y = 0; y < heightOfStacks; y++) {
+  for (let x = 0; x < numberOfStacks; x++) {
+    const crate = lines[y][1 + x * 4];
+    if (crate !== " ") stacks[x].unshift(crate);
+  }
+}
+
+const steps: Step[] = lines.slice(heightOfStacks + 1).map((line) => {
+  const [move, from, to] = line.match(/(\d+)/g)!.map(Number);
+  return { move, from: from - 1, to: to - 1 };
+});
+
+// Part 1, 2:
+const stacksPart2 = deepCopy(stacks);
+
+function rearrange(stacks: string[][], step: Step, craneModel: string) {
+  const crates = stacks[step.from].splice(-step.move);
+  if (craneModel === CRATE_MOVER_9000) crates.reverse();
+  stacks[step.to].push(...crates);
+}
+
+for (const step of steps) {
+  rearrange(stacks, step, CRATE_MOVER_9000);
+  rearrange(stacksPart2, step, CRATE_MOVER_9001);
+}
+
+console.log("Part 1:", stacks.map(last).join(""));
+console.log("Part 2:", stacksPart2.map(last).join(""));
+```
+
 ## How to run?
 
 Install dependencies:
@@ -190,3 +240,4 @@ npx ts-node day-<nr>/<file>.ts
 [2]: #day-2-rock-paper-scissors
 [3]: #day-3-rucksack-reorganization
 [4]: #day-4-camp-cleanup
+[5]: #day-5-supply-stacks

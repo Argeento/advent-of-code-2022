@@ -1,7 +1,12 @@
 import { readFileSync } from 'fs'
 
-export function getLinesFromFile<T extends string>(file: string): T[] {
-  return readFileSync(file).toString().trim().split('\n') as T[]
+export function getLinesFromFile<T extends string>(
+  file: string,
+  { trim } = { trim: true }
+): T[] {
+  let txt = readFileSync(file).toString()
+  if (trim) txt = txt.trim()
+  return txt.split('\n').filter(x => x !== '') as T[]
 }
 
 export function getNumbersFromFile(file: string): number[] {
