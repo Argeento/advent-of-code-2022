@@ -11,6 +11,7 @@ My solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeSc
 |  3  | [Rucksack Reorganization][3] | :star: | :star: |
 |  4  |      [Camp Cleanup][4]       | :star: | :star: |
 |  5  |      [Supply Stacks][5]      | :star: | :star: |
+|  6  |     [Tuning Trouble][6]      | :star: | :star: |
 
 ## Solutions
 
@@ -216,6 +217,31 @@ console.log("Part 1:", stacks.map(last).join(""));
 console.log("Part 2:", stacksPart2.map(last).join(""));
 ```
 
+---
+
+### Day 6: Tuning Trouble
+
+Quest: [adventofcode.com/2022/day/6](https://adventofcode.com/2022/day/6) <br>
+
+```ts
+import { range } from "lodash";
+import { getLinesFromFile } from "../utils";
+
+const signal = getLinesFromFile("./day-06/input.txt")[0];
+
+function findStartIndex(signal: string, markerLength: number) {
+  let regex = "(.)";
+  for (let i = 2; i <= markerLength; i++) {
+    const negativeLookAhead = range(1, i).map((n) => `\\${n}`);
+    regex += `(?!(?:${negativeLookAhead.join("|")}))(.)`;
+  }
+  return signal.match(new RegExp(regex))!.index! + markerLength;
+}
+
+console.log("Part 1:", findStartIndex(signal, 4));
+console.log("Part 2:", findStartIndex(signal, 14));
+```
+
 ## How to run?
 
 Install dependencies:
@@ -235,3 +261,4 @@ npx ts-node day-<nr>/<file>.ts
 [3]: #day-3-rucksack-reorganization
 [4]: #day-4-camp-cleanup
 [5]: #day-5-supply-stacks
+[6]: #day-6-tuning-trouble
