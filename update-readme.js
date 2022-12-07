@@ -65,13 +65,18 @@ npm ci
 \`\`\`
 Run solution:
 \`\`\`shell
-npx ts-node day-<nr>/<file>.ts
+npx ts-node day-<nr>/index.ts
 \`\`\`
 ${links.join('\n')}
 `
 
   fs.writeFileSync(
     './README.md',
-    prettier.format(fileContent, { parser: 'markdown' })
+    prettier.format(fileContent, {
+      parser: 'markdown',
+      singleQuote: true,
+      arrowParens: 'avoid',
+      semi: false,
+    })
   )
 })
