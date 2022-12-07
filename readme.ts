@@ -46,7 +46,13 @@ ${days
 
 ${day.content}
 
-Quest: [adventofcode.com/2022/day/${day.nr}](https://adventofcode.com/2022/day/${day.nr})
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/${day.nr
+      .toString()
+      .padStart(2, '0')}/story.png">
+
+Quest: [adventofcode.com/2022/day/${
+      day.nr
+    }](https://adventofcode.com/2022/day/${day.nr})
 
 #### Solution
 \`\`\`ts

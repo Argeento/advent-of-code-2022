@@ -26,6 +26,8 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 
 The jungle must be too overgrown and difficult to navigate in vehicles or access from the air; the Elves' expedition traditionally goes on foot. As your boats approach land, the Elves begin taking inventory of their supplies. One important consideration is food - in particular, the number of Calories each Elf is carrying.
 
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/01/story.png">
+
 Quest: [adventofcode.com/2022/day/1](https://adventofcode.com/2022/day/1)
 
 #### Solution
@@ -55,6 +57,8 @@ console.log('Part 2:', elves.slice(0, 3).reduce(add))
 ### Day 2: Rock Paper Scissors
 
 The Elves begin to set up camp on the beach. To decide whose tent gets to be closest to the snack storage, a giant Rock Paper Scissors tournament is already in progress.
+
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/02/story.png">
 
 Quest: [adventofcode.com/2022/day/2](https://adventofcode.com/2022/day/2)
 
@@ -112,6 +116,8 @@ console.log('Part 2:', strategies.map(s => pointsMap2[s]).reduce(add))
 
 One Elf has the important job of loading all of the rucksacks with supplies for the jungle journey. Unfortunately, that Elf didn't quite follow the packing instructions, and so a few items now need to be rearranged.
 
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/03/story.png">
+
 Quest: [adventofcode.com/2022/day/3](https://adventofcode.com/2022/day/3)
 
 #### Solution
@@ -156,6 +162,8 @@ console.log('part 2:', badgeSum)
 
 Space needs to be cleared before the last supplies can be unloaded from the ships, and so several Elves have been assigned the job of cleaning up sections of the camp.
 
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/04/story.png">
+
 Quest: [adventofcode.com/2022/day/4](https://adventofcode.com/2022/day/4)
 
 #### Solution
@@ -188,6 +196,8 @@ console.log('Part 2:', anyOverlapping)
 ### Day 5: Supply Stacks
 
 The expedition can depart as soon as the final supplies have been unloaded from the ships. Supplies are stored in stacks of marked crates, but because the needed supplies are buried under many other crates, the crates need to be rearranged.
+
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/05/story.png">
 
 Quest: [adventofcode.com/2022/day/5](https://adventofcode.com/2022/day/5)
 
@@ -246,6 +256,8 @@ As you move through the dense undergrowth, one of the Elves gives you a handheld
 
 However, because he's heard you have significant experience dealing with signal-based systems, he convinced the other Elves that it would be okay to give you their one malfunctioning device - surely you'll have no problem fixing it.
 
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/06/story.png">
+
 Quest: [adventofcode.com/2022/day/6](https://adventofcode.com/2022/day/6)
 
 #### Solution
@@ -283,6 +295,8 @@ Error: No space left on device
 ```
 
 Perhaps you can delete some files to make space for the update?
+
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/07/story.png">
 
 Quest: [adventofcode.com/2022/day/7](https://adventofcode.com/2022/day/7)
 
