@@ -1,11 +1,11 @@
-import { deepCopy, last, getLinesFromFile } from '../utils'
+import { deepCopy, last, getLinesFromInput } from '../utils'
 
 const CRATE_MOVER_9000 = 'CrateMover 9000'
 const CRATE_MOVER_9001 = 'CrateMover 9001'
 type Step = { move: number; from: number; to: number }
 
 // Read file
-const lines = getLinesFromFile('./day-05/input.txt', { trim: false })
+const lines = getLinesFromInput(__dirname)
 const numberOfStacks = (lines[0].length + 1) / 4
 const heightOfStacks = lines.findIndex(line => line[1] === '1')
 const stacks: string[][] = new Array(numberOfStacks).fill(0).map(() => [])
@@ -17,7 +17,7 @@ for (let y = 0; y < heightOfStacks; y++) {
   }
 }
 
-const steps: Step[] = lines.slice(heightOfStacks + 1).map(line => {
+const steps: Step[] = lines.slice(heightOfStacks + 2).map(line => {
   const [move, from, to] = line.match(/(\d+)/g)!.map(Number)
   return { move, from: from - 1, to: to - 1 }
 })

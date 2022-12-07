@@ -1,6 +1,6 @@
-import { asc, add, getLinesFromFile } from '../utils'
+import { asc, add, getLinesFromInput } from '../utils'
 
-const lines = getLinesFromFile('./day-07/input.txt')
+const lines = getLinesFromInput(__dirname)
 const fs: Record<string, number> = {}
 const path: string[] = []
 

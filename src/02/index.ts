@@ -1,4 +1,4 @@
-import { add, getLinesFromFile } from '../utils'
+import { add, getLinesFromInput } from '../utils'
 
 type Strategy = `${'A' | 'B' | 'C'}${'X' | 'Y' | 'Z'}`
 type PointsMap = Record<Strategy, number>
@@ -11,7 +11,7 @@ const X = 1 // A - ROCK
 const Y = 2 // B - PAPER
 const Z = 3 // C - SCISSORS
 
-const strategies = getLinesFromFile('./day-02/data.txt').map(
+const strategies = getLinesFromInput(__dirname).map(
   line => line.replace(' ', '') as Strategy
 )
 
@@ -27,11 +27,6 @@ const pointsMap: PointsMap = {
   CZ: D + Z,
 }
 
-console.log(
-  'Part 1:',
-  strategies.map(strategy => pointsMap[strategy]).reduce(add)
-)
-
 const pointsMap2: PointsMap = {
   AX: L + Z,
   AY: D + X,
@@ -44,7 +39,5 @@ const pointsMap2: PointsMap = {
   CZ: W + X,
 }
 
-console.log(
-  'Part 2:',
-  strategies.map(strategy => pointsMap2[strategy]).reduce(add)
-)
+console.log('Part 1:', strategies.map(s => pointsMap[s]).reduce(add))
+console.log('Part 2:', strategies.map(s => pointsMap2[s]).reduce(add))

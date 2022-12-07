@@ -1,6 +1,6 @@
-import { add, desc, getLinesFromFile } from '../utils'
+import { add, desc, getLinesFromInput } from '../utils'
 
-const lines = getLinesFromFile('./day-01/data.txt')
+const lines = getLinesFromInput(__dirname)
 const elves: number[] = [0]
 
 for (const line of lines) {

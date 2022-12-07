@@ -1,27 +1,31 @@
 import { readFileSync } from 'fs'
+import path from 'path'
 
-export function getLinesFromFile<T extends string>(
-  file: string,
-  { trim } = { trim: true }
-): T[] {
-  let txt = readFileSync(file).toString()
-  if (trim) txt = txt.trim()
-  return txt.split('\n').filter(x => x !== '') as T[]
+export function getLinesFromInput<T extends string>(dirname: string): T[] {
+  const lines = readFileSync(path.join(dirname, 'input.txt'))
+    .toString()
+    .split('\n') as T[]
+
+  if (last(lines) === '') {
+    lines.pop()
+  }
+
+  return lines
 }
 
-export function getNumbersFromFile(file: string): number[] {
-  const lines = getLinesFromFile(file)
+export function getNumbersFromInput(dirname: string): number[] {
+  const lines = getLinesFromInput(dirname)
 
   return lines.length === 1
     ? lines[0]!.split(',').map(Number)
-    : getLinesFromFile(file).map(line => parseFloat(line))
+    : getLinesFromInput(dirname).map(line => parseFloat(line))
 }
 
-export function getArray2dFromFile<T extends string>(
-  file: string,
+export function getArray2dFromInput<T extends string>(
+  dirname: string,
   splitBy = ''
 ): T[][] {
-  return getLinesFromFile(file).map(line => line.split(splitBy) as T[])
+  return getLinesFromInput(dirname).map(line => line.split(splitBy) as T[])
 }
 
 export function add(a: number, b: number): number {

@@ -2,7 +2,13 @@
 
 My solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeScript
 
-## Stars
+## Story
+
+Santa's reindeer typically eat regular reindeer food, but they need a lot of magical energy to deliver presents on Christmas. For that, their favorite snack is a special type of **star fruit** that only grows deep in the jungle. The Elves have brought you on their annual expedition to the grove where the fruit grows.
+
+To supply enough magical energy, the expedition needs to retrieve a minimum of fifty stars by December 25th. Although the Elves assure you that the grove has plenty of fruit, you decide to grab any fruit you see along the way, just in case.
+
+## Star fruits
 
 | Day |            Quest             | Part 1 | Part 2 |
 | :-: | :--------------------------: | :----: | :----: |
@@ -14,16 +20,20 @@ My solutions for [Advent of Code 2022](https://adventofcode.com/2022/) in TypeSc
 |  6  |     [Tuning Trouble][6]      | :star: | :star: |
 |  7  | [No Space Left On Device][7] | :star: | :star: |
 
-## Solutions
+## The journey
 
 ### Day 1: Calorie Counting
 
-Quest: [adventofcode.com/2022/day/1](https://adventofcode.com/2022/day/1) <br>
+The jungle must be too overgrown and difficult to navigate in vehicles or access from the air; the Elves' expedition traditionally goes on foot. As your boats approach land, the Elves begin taking inventory of their supplies. One important consideration is food - in particular, the number of Calories each Elf is carrying.
+
+Quest: [adventofcode.com/2022/day/1](https://adventofcode.com/2022/day/1)
+
+#### Solution
 
 ```ts
-import { add, desc, getLinesFromFile } from '../utils'
+import { add, desc, getLinesFromInput } from '../utils'
 
-const lines = getLinesFromFile('./day-01/data.txt')
+const lines = getLinesFromInput(__dirname)
 const elves: number[] = [0]
 
 for (const line of lines) {
@@ -44,10 +54,14 @@ console.log('Part 2:', elves.slice(0, 3).reduce(add))
 
 ### Day 2: Rock Paper Scissors
 
-Quest: [adventofcode.com/2022/day/2](https://adventofcode.com/2022/day/2) <br>
+The Elves begin to set up camp on the beach. To decide whose tent gets to be closest to the snack storage, a giant Rock Paper Scissors tournament is already in progress.
+
+Quest: [adventofcode.com/2022/day/2](https://adventofcode.com/2022/day/2)
+
+#### Solution
 
 ```ts
-import { add, getLinesFromFile } from '../utils'
+import { add, getLinesFromInput } from '../utils'
 
 type Strategy = `${'A' | 'B' | 'C'}${'X' | 'Y' | 'Z'}`
 type PointsMap = Record<Strategy, number>
@@ -60,7 +74,7 @@ const X = 1 // A - ROCK
 const Y = 2 // B - PAPER
 const Z = 3 // C - SCISSORS
 
-const strategies = getLinesFromFile('./day-02/data.txt').map(
+const strategies = getLinesFromInput(__dirname).map(
   line => line.replace(' ', '') as Strategy
 )
 
@@ -76,11 +90,6 @@ const pointsMap: PointsMap = {
   CZ: D + Z,
 }
 
-console.log(
-  'Part 1:',
-  strategies.map(strategy => pointsMap[strategy]).reduce(add)
-)
-
 const pointsMap2: PointsMap = {
   AX: L + Z,
   AY: D + X,
@@ -93,23 +102,25 @@ const pointsMap2: PointsMap = {
   CZ: W + X,
 }
 
-console.log(
-  'Part 2:',
-  strategies.map(strategy => pointsMap2[strategy]).reduce(add)
-)
+console.log('Part 1:', strategies.map(s => pointsMap[s]).reduce(add))
+console.log('Part 2:', strategies.map(s => pointsMap2[s]).reduce(add))
 ```
 
 ---
 
 ### Day 3: Rucksack Reorganization
 
-Quest: [adventofcode.com/2022/day/3](https://adventofcode.com/2022/day/3) <br>
+One Elf has the important job of loading all of the rucksacks with supplies for the jungle journey. Unfortunately, that Elf didn't quite follow the packing instructions, and so a few items now need to be rearranged.
+
+Quest: [adventofcode.com/2022/day/3](https://adventofcode.com/2022/day/3)
+
+#### Solution
 
 ```ts
-import { add, getLinesFromFile } from '../utils'
+import { add, getLinesFromInput } from '../utils'
 import { chunk, intersection } from 'lodash'
 
-const rucksacks = getLinesFromFile('./day-03/data.txt').map(x => [...x])
+const rucksacks = getLinesFromInput(__dirname).map(x => [...x])
 
 function itemToPriority(item: string) {
   const code = item.charCodeAt(0)
@@ -130,13 +141,12 @@ const prioritySum = rucksacks
   .map(itemToPriority)
   .reduce(add)
 
-console.log('part 1:', prioritySum)
-
 const badgeSum = chunk(rucksacks, 3)
   .map(commonItem)
   .map(itemToPriority)
   .reduce(add)
 
+console.log('part 1:', prioritySum)
 console.log('part 2:', badgeSum)
 ```
 
@@ -144,13 +154,17 @@ console.log('part 2:', badgeSum)
 
 ### Day 4: Camp Cleanup
 
-Quest: [adventofcode.com/2022/day/4](https://adventofcode.com/2022/day/4) <br>
+Space needs to be cleared before the last supplies can be unloaded from the ships, and so several Elves have been assigned the job of cleaning up sections of the camp.
+
+Quest: [adventofcode.com/2022/day/4](https://adventofcode.com/2022/day/4)
+
+#### Solution
 
 ```ts
 import { intersection, range } from 'lodash'
-import { getLinesFromFile } from '../utils'
+import { getLinesFromInput } from '../utils'
 
-const pairs = getLinesFromFile('./day-04/data.txt').map(line =>
+const pairs = getLinesFromInput(__dirname).map(line =>
   line.split(',').map(range => range.split('-').map(Number))
 )
 
@@ -173,17 +187,21 @@ console.log('Part 2:', anyOverlapping)
 
 ### Day 5: Supply Stacks
 
-Quest: [adventofcode.com/2022/day/5](https://adventofcode.com/2022/day/5) <br>
+The expedition can depart as soon as the final supplies have been unloaded from the ships. Supplies are stored in stacks of marked crates, but because the needed supplies are buried under many other crates, the crates need to be rearranged.
+
+Quest: [adventofcode.com/2022/day/5](https://adventofcode.com/2022/day/5)
+
+#### Solution
 
 ```ts
-import { deepCopy, last, getLinesFromFile } from '../utils'
+import { deepCopy, last, getLinesFromInput } from '../utils'
 
 const CRATE_MOVER_9000 = 'CrateMover 9000'
 const CRATE_MOVER_9001 = 'CrateMover 9001'
 type Step = { move: number; from: number; to: number }
 
 // Read file
-const lines = getLinesFromFile('./day-05/input.txt', { trim: false })
+const lines = getLinesFromInput(__dirname)
 const numberOfStacks = (lines[0].length + 1) / 4
 const heightOfStacks = lines.findIndex(line => line[1] === '1')
 const stacks: string[][] = new Array(numberOfStacks).fill(0).map(() => [])
@@ -195,7 +213,7 @@ for (let y = 0; y < heightOfStacks; y++) {
   }
 }
 
-const steps: Step[] = lines.slice(heightOfStacks + 1).map(line => {
+const steps: Step[] = lines.slice(heightOfStacks + 2).map(line => {
   const [move, from, to] = line.match(/(\d+)/g)!.map(Number)
   return { move, from: from - 1, to: to - 1 }
 })
@@ -222,13 +240,21 @@ console.log('Part 2:', stacksPart2.map(last).join(''))
 
 ### Day 6: Tuning Trouble
 
-Quest: [adventofcode.com/2022/day/6](https://adventofcode.com/2022/day/6) <br>
+The preparations are finally complete; you and the Elves leave camp on foot and begin to make your way toward the star fruit grove.
+
+As you move through the dense undergrowth, one of the Elves gives you a handheld device. He says that it has many fancy features, but the most important one to set up right now is the communication system.
+
+However, because he's heard you have significant experience dealing with signal-based systems, he convinced the other Elves that it would be okay to give you their one malfunctioning device - surely you'll have no problem fixing it.
+
+Quest: [adventofcode.com/2022/day/6](https://adventofcode.com/2022/day/6)
+
+#### Solution
 
 ```ts
 import { range } from 'lodash'
-import { getLinesFromFile } from '../utils'
+import { getLinesFromInput } from '../utils'
 
-const signal = getLinesFromFile('./day-06/input.txt')[0]
+const signal = getLinesFromInput(__dirname)[0]
 
 function findStartIndex(signal: string, markerLength: number) {
   let regex = '(.)'
@@ -247,12 +273,25 @@ console.log('Part 2:', findStartIndex(signal, 14))
 
 ### Day 7: No Space Left On Device
 
-Quest: [adventofcode.com/2022/day/7](https://adventofcode.com/2022/day/7) <br>
+You can hear birds chirping and raindrops hitting leaves as the expedition proceeds. Occasionally, you can even hear much louder sounds in the distance; how big do the animals get out here, anyway?
+
+The device the Elves gave you has problems with more than just its communication system. You try to run a system update:
+
+```bash
+$ system-update --please --pretty-please-with-sugar-on-top
+Error: No space left on device
+```
+
+Perhaps you can delete some files to make space for the update?
+
+Quest: [adventofcode.com/2022/day/7](https://adventofcode.com/2022/day/7)
+
+#### Solution
 
 ```ts
-import { asc, add, getLinesFromFile } from '../utils'
+import { asc, add, getLinesFromInput } from '../utils'
 
-const lines = getLinesFromFile('./day-07/input.txt')
+const lines = getLinesFromInput(__dirname)
 const fs: Record<string, number> = {}
 const path: string[] = []
 
@@ -282,7 +321,15 @@ console.log('Part 1:', sum)
 console.log('Part 2:', size)
 ```
 
+---
+
 ## How to run?
+
+Requirements:
+
+```
+node v18.12.1
+```
 
 Install dependencies:
 
@@ -293,8 +340,22 @@ npm ci
 Run solution:
 
 ```shell
-npx ts-node day-<nr>/index.ts
+npx ts-node src/<nr>/index.ts
 ```
+
+## Thanks to the AoC team
+
+Puzzles, Code, & Design: [Eric Wastl](https://twitter.com/ericwastl)
+
+Beta Testing:
+
+- [Tim Giannetti](https://twitter.com/Sr_Giannetti)
+- Ben Lucek
+- [JP Burke](https://twitter.com/yatpay)
+- [Aneurysm9](https://twitter.com/Aneurysm9)
+- Andrew Skalski
+
+Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/adventofcode) and [Aneurysm9](https://twitter.com/Aneurysm9)
 
 [1]: #day-1-calorie-counting
 [2]: #day-2-rock-paper-scissors

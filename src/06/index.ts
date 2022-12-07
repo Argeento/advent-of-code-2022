@@ -1,7 +1,7 @@
 import { range } from 'lodash'
-import { getLinesFromFile } from '../utils'
+import { getLinesFromInput } from '../utils'
 
-const signal = getLinesFromFile('./day-06/input.txt')[0]
+const signal = getLinesFromInput(__dirname)[0]
 
 function findStartIndex(signal: string, markerLength: number) {
   let regex = '(.)'
