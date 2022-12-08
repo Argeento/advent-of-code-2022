@@ -79,6 +79,11 @@ Run solution:
 npx ts-node src/<nr>/index.ts
 \`\`\`
 
+Generate \`README.md\`:
+\`\`\`shell
+npm run readme
+\`\`\`
+
 
 ## Story illustrations
 [Midjourney](https://twitter.com/midjourney) and [DALL-E](https://openai.com/dall-e-2/)

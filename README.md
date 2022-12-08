@@ -349,20 +349,25 @@ Quest: [adventofcode.com/2022/day/8](https://adventofcode.com/2022/day/8)
 #### Solution
 
 ```ts
-import { getArray2dFromInput, getColumn, loop2d, multiply } from '../utils'
+import { Cartesian } from '../Cartesian'
+import { getArray2dFromInput, multiply } from '../utils'
 
-const trees = getArray2dFromInput(__dirname).map(line => line.map(Number))
+const trees = new Cartesian(
+  getArray2dFromInput(__dirname).map(line => line.map(Number))
+)
 
-function getTreeInfo(trees: number[][], x: number, y: number) {
-  const column = getColumn(trees, x)
-  const row = trees[y]
-  const tree = trees[y][x]
+let maxScore = -Infinity
+let visibleTrees = 0
+
+trees.forEach((tree, x, y) => {
+  const col = trees.cols[x]
+  const row = trees.rows[y]
 
   const dirs = [
-    column.slice(0, y).reverse(),
-    column.slice(y + 1),
-    row.slice(0, x).reverse(),
-    row.slice(x + 1),
+    col.slice(0, y).reverse(), // bottom
+    col.slice(y + 1), // top
+    row.slice(0, x).reverse(), // left
+    row.slice(x + 1), // right
   ]
 
   const isVisible = dirs.some(dir => tree > Math.max(...dir))
@@ -370,14 +375,6 @@ function getTreeInfo(trees: number[][], x: number, y: number) {
     .map(dir => dir.findIndex(t => t >= tree) + 1 || dir.length)
     .reduce(multiply, 1)
 
-  return { scenicScore, isVisible }
-}
-
-let maxScore = -Infinity
-let visibleTrees = 0
-
-loop2d(trees, (x, y) => {
-  const { scenicScore, isVisible } = getTreeInfo(trees, x, y)
   if (scenicScore > maxScore) maxScore = scenicScore
   if (isVisible) visibleTrees += 1
 })
@@ -406,6 +403,12 @@ Run solution:
 
 ```shell
 npx ts-node src/<nr>/index.ts
+```
+
+Generate `README.md`:
+
+```shell
+npm run readme
 ```
 
 ## Story illustrations

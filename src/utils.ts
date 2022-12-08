@@ -90,8 +90,8 @@ export function flipY<T>(arr: Array2d<T>): Array2d<T> {
 }
 
 export function getManhattanDistance(
-  positionA: Position2d,
-  positionB: Position2d = { x: 0, y: 0 }
+  positionA: Position,
+  positionB: Position = { x: 0, y: 0 }
 ): number {
   return (
     Math.abs(positionA.x - positionB.x) + Math.abs(positionA.y - positionB.y)
