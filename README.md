@@ -408,6 +408,10 @@ Run solution:
 npx ts-node src/<nr>/index.ts
 ```
 
+## Story illustrations
+
+[Midjourney](https://twitter.com/midjourney) and [DALL-E](https://openai.com/dall-e-2/)
+
 ## Thanks to the AoC team
 
 Puzzles, Code, & Design: [Eric Wastl](https://twitter.com/ericwastl)
