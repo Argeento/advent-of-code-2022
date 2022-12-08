@@ -19,6 +19,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 |  5  |      [Supply Stacks][5]      | :star: | :star: |
 |  6  |     [Tuning Trouble][6]      | :star: | :star: |
 |  7  | [No Space Left On Device][7] | :star: | :star: |
+|  8  |   [Treetop Tree House][8]    | :star: | :star: |
 
 ## The journey
 
@@ -337,6 +338,56 @@ console.log('Part 2:', size)
 
 ---
 
+### Day 8: Treetop Tree House
+
+The expedition comes across a peculiar patch of tall trees all planted carefully in a grid. The Elves explain that a previous expedition planted these trees as a reforestation effort. Now, they're curious if this would be a good location for a tree house.
+
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/08/story.png">
+
+Quest: [adventofcode.com/2022/day/8](https://adventofcode.com/2022/day/8)
+
+#### Solution
+
+```ts
+import { getArray2dFromInput, getColumn, loop2d, multiply } from '../utils'
+
+const trees = getArray2dFromInput(__dirname).map(line => line.map(Number))
+
+function getTreeInfo(trees: number[][], x: number, y: number) {
+  const column = getColumn(trees, x)
+  const row = trees[y]
+  const tree = trees[y][x]
+
+  const dirs = [
+    column.slice(0, y).reverse(),
+    column.slice(y + 1),
+    row.slice(0, x).reverse(),
+    row.slice(x + 1),
+  ]
+
+  const isVisible = dirs.some(dir => tree > Math.max(...dir))
+  const scenicScore = dirs
+    .map(dir => dir.findIndex(t => t >= tree) + 1 || dir.length)
+    .reduce(multiply, 1)
+
+  return { scenicScore, isVisible }
+}
+
+let maxScore = -Infinity
+let visibleTrees = 0
+
+loop2d(trees, (x, y) => {
+  const { scenicScore, isVisible } = getTreeInfo(trees, x, y)
+  if (scenicScore > maxScore) maxScore = scenicScore
+  if (isVisible) visibleTrees += 1
+})
+
+console.log('Part 1', visibleTrees)
+console.log('Part 2', maxScore)
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -378,3 +429,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [5]: #day-5-supply-stacks
 [6]: #day-6-tuning-trouble
 [7]: #day-7-no-space-left-on-device
+[8]: #day-8-treetop-tree-house
