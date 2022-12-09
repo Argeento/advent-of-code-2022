@@ -20,6 +20,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 |  6  |     [Tuning Trouble][6]      | :star: | :star: |
 |  7  | [No Space Left On Device][7] | :star: | :star: |
 |  8  |   [Treetop Tree House][8]    | :star: | :star: |
+|  9  |       [Rope Bridge][9]       | :star: | :star: |
 
 ## The journey
 
@@ -385,6 +386,77 @@ console.log('Part 2', maxScore)
 
 ---
 
+### Day 9: Rope Bridge
+
+This rope bridge creaks as you walk along it. You aren't sure how old it is, or whether it can even support your weight.
+
+It seems to support the Elves just fine, though. The bridge spans a gorge which was carved out by the massive river far below you.
+
+You step carefully; as you do, the ropes stretch and twist. You decide to distract yourself by modeling rope physics; maybe you can even figure out where not to step.
+
+<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/09/story.png">
+
+Quest: [adventofcode.com/2022/day/9](https://adventofcode.com/2022/day/9)
+
+#### Solution
+
+```ts
+import { range, values } from 'lodash'
+import { getLinesFromInput, last } from '../utils'
+
+const dirs = getLinesFromInput(__dirname)
+  .map(line => line.split(' '))
+  .map(([dir, steps]) => dir.repeat(+steps))
+  .join('')
+
+function move(knot: Point, dir: string) {
+  if (dir === 'R') knot.x++
+  if (dir === 'L') knot.x--
+  if (dir === 'U') knot.y++
+  if (dir === 'D') knot.y--
+}
+
+function follow(follower: Point, leader: Point) {
+  const deltaX = leader.x - follower.x
+  const deltaY = leader.y - follower.y
+  const distance = Math.hypot(deltaX, deltaY)
+
+  if (distance < 2) return
+
+  // prettier-ignore
+  const dir = Math.abs(deltaX) > Math.abs(deltaY)
+    ? deltaX > 0 ? 'R' : 'L'
+    : deltaY > 0 ? 'U' : 'D'
+
+  move(follower, dir)
+
+  if (distance > 2) {
+    const align = 'UD'.includes(dir) ? 'x' : 'y'
+    follower[align] += Math.sign(align === 'x' ? deltaX : deltaY)
+  }
+}
+
+function tailPositions(dirs: string, ropeLength: number) {
+  const positions = new Set<string>().add('0,0')
+  const rope: Point[] = range(ropeLength).map(() => ({ x: 0, y: 0 }))
+
+  for (const dir of dirs) {
+    move(rope[0], dir)
+    for (let i = 1; i < rope.length; i++) {
+      follow(rope[i], rope[i - 1])
+    }
+    positions.add(values(last(rope)).join())
+  }
+
+  return positions.size
+}
+
+console.log('Part 1:', tailPositions(dirs, 2))
+console.log('Part 2:', tailPositions(dirs, 10))
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -437,3 +509,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [6]: #day-6-tuning-trouble
 [7]: #day-7-no-space-left-on-device
 [8]: #day-8-treetop-tree-house
+[9]: #day-9-rope-bridge
