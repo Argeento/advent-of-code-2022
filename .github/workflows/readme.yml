@@ -4,19 +4,29 @@ on:
   push:
     branches:
       - 'main'
-      - 'src/[0-9][0-9]/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Readme build
-        uses: actions/setup-node@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: 'npm'
-      - run: |
+
+      - uses: tj-actions/changed-files@v34
+        id: readme-src-changed
+        with:
+          files: |
+            src/[0-9][0-9]/**
+
+      - name: Readme build
+        if: steps.readme-src-changed.outputs.any_changed == 'true'
+        run: |
           npm ci
           npm run readme
           git config user.name github-actions
