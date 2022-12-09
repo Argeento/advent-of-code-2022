@@ -27,7 +27,7 @@ describe('Cartesian', () => {
     expect(cart.rows[2]).toStrictEqual([1, 2, 3])
   })
 
-  it('returns point', () => {
+  it('gets value', () => {
     const cart = new Cartesian(testArr)
     expect(cart.arr[0][2]).toBe(1)
     expect(cart.get(0, 0)).toBe(7)
@@ -44,5 +44,29 @@ describe('Cartesian', () => {
     expect(cart.get(1, 2)).toBe(12)
     cart.arr[0][0] = 9
     expect(cart.get(0, 0)).toBe(9)
+  })
+
+  it('iterate for each item', () => {
+    const cart = new Cartesian(testArr)
+    const cb = jest.fn()
+    cart.forEach(cb)
+    expect(cb.mock.calls).toEqual([
+      [7, 0, 0, cart],
+      [4, 0, 1, cart],
+      [1, 0, 2, cart],
+      [8, 1, 0, cart],
+      [5, 1, 1, cart],
+      [2, 1, 2, cart],
+      [9, 2, 0, cart],
+      [6, 2, 1, cart],
+      [3, 2, 2, cart],
+    ])
+  })
+
+  it('prints array', () => {
+    const cart = new Cartesian(testArr)
+    const log = jest.fn()
+    cart.print(log)
+    expect(log.mock.calls.flatMap(x => x)).toEqual(['123', '456', '789'])
   })
 })
