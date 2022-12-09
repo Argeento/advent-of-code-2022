@@ -88,4 +88,16 @@ export class Cartesian<Item> {
   public get values(): Item[] {
     return this.arr.flatMap(x => x)
   }
+
+  static createEmpty<T>(size: number, fill: T) {
+    const arr: T[][] = []
+    for (let x = 0; x < size; x++) {
+      arr.push([])
+      for (let y = 0; y < size; y++) {
+        arr[x][y] = fill
+      }
+    }
+
+    return new Cartesian(arr)
+  }
 }

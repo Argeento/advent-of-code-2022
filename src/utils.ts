@@ -98,6 +98,10 @@ export function getManhattanDistance(
   )
 }
 
+export function getDistance(positionA: Position, PositionB: Position): number {
+  return Math.hypot(positionA.x - PositionB.x, positionA.y - PositionB.y)
+}
+
 export function match<
   Variant extends PropertyKey,
   Options extends Record<Variant, () => any>
