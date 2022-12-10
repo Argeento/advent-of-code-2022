@@ -21,6 +21,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 |  7  | [No Space Left On Device][7] | :star: | :star: |
 |  8  |   [Treetop Tree House][8]    | :star: | :star: |
 |  9  |       [Rope Bridge][9]       | :star: | :star: |
+| 10  |    [Cathode-Ray Tube][10]    | :star: | :star: |
 
 ## The journey
 
@@ -457,6 +458,46 @@ console.log('Part 2:', tailPositions(dirs, 10))
 
 ---
 
+### Day 10: Cathode-Ray Tube
+
+You avoid the ropes, plunge into the river, and swim to shore.
+
+The Elves yell something about meeting back up with them upriver, but the river is too loud to tell exactly what they're saying. They finish crossing the bridge and disappear from view.
+
+Situations like this must be why the Elves prioritized getting the communication system on your handheld device working. You pull it out of your pack, but the amount of water slowly draining from a big crack in its screen tells you it probably won't be of much immediate use.
+
+Quest: [adventofcode.com/2022/day/10](https://adventofcode.com/2022/day/10)
+
+#### Solution
+
+```ts
+import { getLinesFromInput, toNumber, inRange, divisible } from '../utils'
+
+let x = 1
+let sum = 0
+let cycle = 0
+let crt = ''
+
+getLinesFromInput(__dirname).forEach(line => {
+  exec()
+  if (line.startsWith('add')) {
+    exec()
+    x += toNumber(line)
+  }
+})
+
+function exec() {
+  if (divisible(cycle + 21, 40)) sum += (cycle + 1) * x
+  crt += inRange(x - 1, cycle % 40, x + 1) ? '#' : '.'
+  cycle++
+}
+
+console.log('Part 1:', sum)
+console.log(crt.match(/.{40}/g)!.join('\n'))
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -510,3 +551,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [7]: #day-7-no-space-left-on-device
 [8]: #day-8-treetop-tree-house
 [9]: #day-9-rope-bridge
+[10]: #day-10-cathode-ray-tube

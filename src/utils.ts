@@ -44,7 +44,7 @@ export function desc(a: any, b: any): number {
   return b - a
 }
 
-export function isInRange(min: number, value: number, max: number): boolean {
+export function inRange(min: number, value: number, max: number): boolean {
   return value >= min && value <= max
 }
 
@@ -157,4 +157,12 @@ export function loop2d<T>(
 
 export function last<T>(arr: T[]): T | undefined {
   return arr[arr.length - 1]
+}
+
+export function toNumber(str: string): number {
+  return parseFloat(str.match(/\-?\d+((.|,)\d+)?/)?.[0] || '')
+}
+
+export function divisible(a: number, b: number): boolean {
+  return a % b === 0
 }

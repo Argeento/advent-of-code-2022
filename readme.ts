@@ -46,9 +46,16 @@ ${days
 
 ${day.content}
 
-<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/${day.nr
-      .toString()
-      .padStart(2, '0')}/story.png">
+${
+  fs.existsSync(
+    path.join(__dirname, 'src', day.nr.toString().padStart(2, '0'), 'story.png')
+  )
+    ? `<img width="270" alt="" src="https://github.com/Argeento/advent-of-code-2022/blob/main/src/${day.nr
+        .toString()
+        .padStart(2, '0')}/story.png">`
+    : ''
+}
+
 
 Quest: [adventofcode.com/2022/day/${
       day.nr
