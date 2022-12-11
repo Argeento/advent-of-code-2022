@@ -22,6 +22,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 |  8  |   [Treetop Tree House][8]    | :star: | :star: |
 |  9  |       [Rope Bridge][9]       | :star: | :star: |
 | 10  |    [Cathode-Ray Tube][10]    | :star: | :star: |
+| 11  |  [Monkey in the Middle][11]  | :star: | :star: |
 
 ## The journey
 
@@ -473,6 +474,75 @@ console.log(crt.match(/.{40}/g)!.join('\n'))
 
 ---
 
+### Day 11: Monkey in the Middle
+
+As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then, one of the items from your pack goes flying overhead. Monkeys are playing Keep Away with your missing things!
+
+To get your stuff back, you need to be able to predict where the monkeys will throw your items. After some careful observation, you realize the monkeys operate based on how worried you are about each item.
+
+Quest: [adventofcode.com/2022/day/11](https://adventofcode.com/2022/day/11)
+
+#### Solution
+
+```ts
+import { multiply, range } from 'lodash'
+import { desc, getInput, getLcm, toNumber, toNumbers } from '../utils'
+
+type CalcWorry = (worry: number) => number
+
+const input = getInput(__dirname)
+  .split('\n\n')
+  .map(x => x.split('\n'))
+
+function getMonkeys(calcWorry: CalcWorry) {
+  const lcm = getLcm(input.map(x => x[3]).map(toNumber))
+  const monkeys = input.map(line => ({
+    items: toNumbers(line[1]),
+    divisible: toNumber(line[3]),
+    targetTrue: toNumber(line[4]),
+    targetFalse: toNumber(line[5]),
+    inspects: 0,
+    operation(old: number): number {
+      return eval(line[2].slice(19))
+    },
+    throwItems() {
+      this.inspects += this.items.length
+      this.items.map(item => {
+        const worry = calcWorry(this.operation(item)) % lcm
+        const test = worry % this.divisible === 0
+        const target = test ? this.targetTrue : this.targetFalse
+        monkeys[target].items.push(worry)
+      })
+      this.items.length = 0
+    },
+  }))
+
+  return monkeys
+}
+
+function business(rounds: number, calcWorry: CalcWorry) {
+  const monkeys = getMonkeys(calcWorry)
+
+  range(rounds).forEach(() => {
+    monkeys.forEach(monkey => monkey.throwItems())
+  })
+
+  return monkeys
+    .map(monkey => monkey.inspects)
+    .sort(desc)
+    .slice(0, 2)
+    .reduce(multiply)
+}
+
+const part1 = business(20, x => Math.floor(x / 3))
+const part2 = business(10_000, x => x)
+
+console.log('Part 1', part1)
+console.log('Part 2', part2)
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -527,3 +597,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [8]: #day-8-treetop-tree-house
 [9]: #day-9-rope-bridge
 [10]: #day-10-cathode-ray-tube
+[11]: #day-11-monkey-in-the-middle

@@ -1,10 +1,12 @@
 import { readFileSync } from 'fs'
 import path from 'path'
 
+export function getInput(dirname: string): string {
+  return readFileSync(path.join(dirname, 'input.txt')).toString()
+}
+
 export function getLinesFromInput<T extends string>(dirname: string): T[] {
-  const lines = readFileSync(path.join(dirname, 'input.txt'))
-    .toString()
-    .split('\n') as T[]
+  const lines = getInput(dirname).split('\n') as T[]
 
   if (last(lines) === '') {
     lines.pop()
@@ -163,6 +165,26 @@ export function toNumber(str: string): number {
   return parseFloat(str.match(/\-?\d+((.|,)\d+)?/)?.[0] || '')
 }
 
+export function toNumbers(str: string): number[] {
+  return (str.match(/\-?\d+((.|,)\d+)?/g) ?? []).map(x => parseFloat(x))
+}
+
 export function divisible(a: number, b: number): boolean {
   return a % b === 0
+}
+
+/** Greatest common divisor */
+export function getGcd(a: number, b: number): number {
+  return !b ? a : getGcd(b, a % b)
+}
+
+/** Least Common Multiple */
+export function getLcm(a: number[]): number
+export function getLcm(a: number, b: number): number
+export function getLcm(a: number | number[], b?: number): number {
+  if (Array.isArray(a)) {
+    return a.reduce(getLcm, 1)
+  }
+  // @ts-ignore
+  return a * (b / getGcd(a, b))
 }
