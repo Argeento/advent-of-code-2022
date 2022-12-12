@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/node": "^18.11.10",
     "chalk": "^4.1.2",
+    "easystarjs": "^0.4.4",
     "lodash": "^4.17.21",
     "markdown-table": "^2.0.0",
     "prettier": "^2.8.0",

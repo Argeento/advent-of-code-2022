@@ -10,19 +10,20 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 
 ## Star fruits
 
-| Day |            Quest             | Part 1 | Part 2 |
-| :-: | :--------------------------: | :----: | :----: |
-|  1  |    [Calorie Counting][1]     | :star: | :star: |
-|  2  |   [Rock Paper Scissors][2]   | :star: | :star: |
-|  3  | [Rucksack Reorganization][3] | :star: | :star: |
-|  4  |      [Camp Cleanup][4]       | :star: | :star: |
-|  5  |      [Supply Stacks][5]      | :star: | :star: |
-|  6  |     [Tuning Trouble][6]      | :star: | :star: |
-|  7  | [No Space Left On Device][7] | :star: | :star: |
-|  8  |   [Treetop Tree House][8]    | :star: | :star: |
-|  9  |       [Rope Bridge][9]       | :star: | :star: |
-| 10  |    [Cathode-Ray Tube][10]    | :star: | :star: |
-| 11  |  [Monkey in the Middle][11]  | :star: | :star: |
+| Day |             Quest             | Part 1 | Part 2 |
+| :-: | :---------------------------: | :----: | :----: |
+|  1  |     [Calorie Counting][1]     | :star: | :star: |
+|  2  |   [Rock Paper Scissors][2]    | :star: | :star: |
+|  3  | [Rucksack Reorganization][3]  | :star: | :star: |
+|  4  |       [Camp Cleanup][4]       | :star: | :star: |
+|  5  |      [Supply Stacks][5]       | :star: | :star: |
+|  6  |      [Tuning Trouble][6]      | :star: | :star: |
+|  7  | [No Space Left On Device][7]  | :star: | :star: |
+|  8  |    [Treetop Tree House][8]    | :star: | :star: |
+|  9  |       [Rope Bridge][9]        | :star: | :star: |
+| 10  |    [Cathode-Ray Tube][10]     | :star: | :star: |
+| 11  |  [Monkey in the Middle][11]   | :star: | :star: |
+| 12  | [Hill Climbing Algorithm][12] | :star: | :star: |
 
 ## The journey
 
@@ -543,6 +544,88 @@ console.log('Part 2', part2)
 
 ---
 
+### Day 12: Hill Climbing Algorithm
+
+You try contacting the Elves using your handheld device, but the river you're following must be too low to get a decent signal.
+
+Quest: [adventofcode.com/2022/day/12](https://adventofcode.com/2022/day/12)
+
+#### Solution
+
+```ts
+import EasyStar from 'easystarjs'
+import { range } from 'lodash'
+import { getArray2dFromInput, loop2d } from '../utils'
+
+const input = getArray2dFromInput(__dirname)
+const start = { x: 0, y: 0 }
+const end = { x: 0, y: 0 }
+const lowestPoints: Point[] = []
+const pathMap: number[][] = range(input.length).map(() =>
+  range(input[0].length).map(() => 0)
+)
+
+const map = new EasyStar.js()
+map.setGrid(pathMap)
+map.setAcceptableTiles([0])
+
+function toHeight(letter?: string) {
+  return letter?.charCodeAt(0) ?? 99
+}
+
+loop2d(input, (y, x) => {
+  if (input[y][x] === 'S') {
+    start.x = x
+    start.y = y
+    input[y][x] = 'a'
+  }
+
+  if (input[y][x] === 'E') {
+    end.x = x
+    end.y = y
+    input[y][x] = 'z'
+  }
+
+  if (input[y][x] === 'a') {
+    lowestPoints.push({ x, y })
+  }
+
+  const dirs: EasyStar.Direction[] = []
+  const current = toHeight(input[y][x])
+  const up = toHeight(input[y - 1]?.[x])
+  const down = toHeight(input[y + 1]?.[x])
+  const left = toHeight(input[y][x - 1])
+  const right = toHeight(input[y][x + 1])
+
+  if (current - up < 2) dirs.push(EasyStar.TOP)
+  if (current - down < 2) dirs.push(EasyStar.BOTTOM)
+  if (current - left < 2) dirs.push(EasyStar.LEFT)
+  if (current - right < 2) dirs.push(EasyStar.RIGHT)
+
+  map.setDirectionalCondition(x, y, dirs)
+})
+
+function getLength(start: Point, end: Point) {
+  return new Promise<number>(resolve => {
+    map.findPath(start.x, start.y, end.x, end.y, steps => {
+      resolve(steps ? steps.length - 1 : Infinity)
+    })
+  })
+}
+
+getLength(start, end).then(path => {
+  console.log('Part 1:', path)
+})
+
+Promise.all(lowestPoints.map(p => getLength(p, end))).then(paths =>
+  console.log('Part 2:', Math.min(...paths))
+)
+
+map.calculate()
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -598,3 +681,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [9]: #day-9-rope-bridge
 [10]: #day-10-cathode-ray-tube
 [11]: #day-11-monkey-in-the-middle
+[12]: #day-12-hill-climbing-algorithm
