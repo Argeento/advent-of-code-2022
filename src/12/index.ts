@@ -1,8 +1,8 @@
 import EasyStar from 'easystarjs'
 import { range } from 'lodash'
-import { getArray2dFromInput, loop2d } from '../utils'
+import { getArray2d, loop2d } from '../utils'
 
-const input = getArray2dFromInput(__dirname)
+const input = getArray2d(__dirname)
 const start = { x: 0, y: 0 }
 const end = { x: 0, y: 0 }
 const lowestPoints: Point[] = []
@@ -37,6 +37,7 @@ loop2d(input, (y, x) => {
 
   const dirs: EasyStar.Direction[] = []
   const current = toHeight(input[y][x])
+
   const up = toHeight(input[y - 1]?.[x])
   const down = toHeight(input[y + 1]?.[x])
   const left = toHeight(input[y][x - 1])

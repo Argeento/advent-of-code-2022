@@ -1,9 +1,8 @@
+import { multiply } from 'lodash'
 import { Cartesian } from '../Cartesian'
-import { getArray2dFromInput, multiply } from '../utils'
+import { getArray2d } from '../utils'
 
-const trees = new Cartesian(
-  getArray2dFromInput(__dirname).map(line => line.map(Number))
-)
+const trees = new Cartesian(getArray2d(__dirname).map(line => line.map(Number)))
 
 let maxScore = -Infinity
 let visibleTrees = 0

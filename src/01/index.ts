@@ -1,6 +1,7 @@
-import { add, desc, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { desc, getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const elves: number[] = [0]
 
 for (const line of lines) {

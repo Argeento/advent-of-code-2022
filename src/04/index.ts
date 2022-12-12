@@ -1,7 +1,7 @@
 import { intersection, range } from 'lodash'
-import { getLinesFromInput } from '../utils'
+import { getLines } from '../utils'
 
-const pairs = getLinesFromInput(__dirname).map(line =>
+const pairs = getLines(__dirname).map(line =>
   line.split(',').map(range => range.split('-').map(Number))
 )
 

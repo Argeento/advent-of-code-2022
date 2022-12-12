@@ -1,11 +1,12 @@
-import { deepCopy, last, getLinesFromInput } from '../utils'
+import { cloneDeep, last } from 'lodash'
+import { getLines } from '../utils'
 
 const CRATE_MOVER_9000 = 'CrateMover 9000'
 const CRATE_MOVER_9001 = 'CrateMover 9001'
 type Step = { move: number; from: number; to: number }
 
 // Read file
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const numberOfStacks = (lines[0].length + 1) / 4
 const heightOfStacks = lines.findIndex(line => line[1] === '1')
 const stacks: string[][] = new Array(numberOfStacks).fill(0).map(() => [])
@@ -23,7 +24,7 @@ const steps: Step[] = lines.slice(heightOfStacks + 2).map(line => {
 })
 
 // Part 1, 2:
-const stacksPart2 = deepCopy(stacks)
+const stacksPart2 = cloneDeep(stacks)
 
 function rearrange(stacks: string[][], step: Step, craneModel: string) {
   const crates = stacks[step.from].splice(-step.move)

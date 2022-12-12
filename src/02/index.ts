@@ -1,6 +1,7 @@
-import { add, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname).map(x => x.replace(' ', ''))
+const lines = getLines(__dirname).map(x => x.replace(' ', ''))
 
 const points: Record<string, number[]> = {
   AX: [4, 3],

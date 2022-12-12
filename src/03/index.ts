@@ -1,7 +1,7 @@
-import { add, getLinesFromInput } from '../utils'
-import { chunk, intersection } from 'lodash'
+import { getLines } from '../utils'
+import { chunk, intersection, add } from 'lodash'
 
-const rucksacks = getLinesFromInput(__dirname).map(x => [...x])
+const rucksacks = getLines(__dirname).map(x => [...x])
 
 function itemToPriority(item: string) {
   const code = item.charCodeAt(0)

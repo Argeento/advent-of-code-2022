@@ -1,7 +1,7 @@
-import { range, values } from 'lodash'
-import { getLinesFromInput, last } from '../utils'
+import { range, values, last } from 'lodash'
+import { getLines } from '../utils'
 
-const dirs = getLinesFromInput(__dirname)
+const dirs = getLines(__dirname)
   .map(line => line.split(' '))
   .map(([dir, steps]) => dir.repeat(+steps))
   .join('')

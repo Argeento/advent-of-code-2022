@@ -1,6 +1,7 @@
-import { asc, add, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { asc, getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const fs: Record<string, number> = {}
 const path: string[] = []
 

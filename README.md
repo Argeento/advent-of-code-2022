@@ -38,9 +38,10 @@ Quest: [adventofcode.com/2022/day/1](https://adventofcode.com/2022/day/1)
 #### Solution
 
 ```ts
-import { add, desc, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { desc, getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const elves: number[] = [0]
 
 for (const line of lines) {
@@ -70,9 +71,10 @@ Quest: [adventofcode.com/2022/day/2](https://adventofcode.com/2022/day/2)
 #### Solution
 
 ```ts
-import { add, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname).map(x => x.replace(' ', ''))
+const lines = getLines(__dirname).map(x => x.replace(' ', ''))
 
 const points: Record<string, number[]> = {
   AX: [4, 3],
@@ -103,10 +105,10 @@ Quest: [adventofcode.com/2022/day/3](https://adventofcode.com/2022/day/3)
 #### Solution
 
 ```ts
-import { add, getLinesFromInput } from '../utils'
-import { chunk, intersection } from 'lodash'
+import { getLines } from '../utils'
+import { chunk, intersection, add } from 'lodash'
 
-const rucksacks = getLinesFromInput(__dirname).map(x => [...x])
+const rucksacks = getLines(__dirname).map(x => [...x])
 
 function itemToPriority(item: string) {
   const code = item.charCodeAt(0)
@@ -150,9 +152,9 @@ Quest: [adventofcode.com/2022/day/4](https://adventofcode.com/2022/day/4)
 
 ```ts
 import { intersection, range } from 'lodash'
-import { getLinesFromInput } from '../utils'
+import { getLines } from '../utils'
 
-const pairs = getLinesFromInput(__dirname).map(line =>
+const pairs = getLines(__dirname).map(line =>
   line.split(',').map(range => range.split('-').map(Number))
 )
 
@@ -184,14 +186,15 @@ Quest: [adventofcode.com/2022/day/5](https://adventofcode.com/2022/day/5)
 #### Solution
 
 ```ts
-import { deepCopy, last, getLinesFromInput } from '../utils'
+import { cloneDeep, last } from 'lodash'
+import { getLines } from '../utils'
 
 const CRATE_MOVER_9000 = 'CrateMover 9000'
 const CRATE_MOVER_9001 = 'CrateMover 9001'
 type Step = { move: number; from: number; to: number }
 
 // Read file
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const numberOfStacks = (lines[0].length + 1) / 4
 const heightOfStacks = lines.findIndex(line => line[1] === '1')
 const stacks: string[][] = new Array(numberOfStacks).fill(0).map(() => [])
@@ -209,7 +212,7 @@ const steps: Step[] = lines.slice(heightOfStacks + 2).map(line => {
 })
 
 // Part 1, 2:
-const stacksPart2 = deepCopy(stacks)
+const stacksPart2 = cloneDeep(stacks)
 
 function rearrange(stacks: string[][], step: Step, craneModel: string) {
   const crates = stacks[step.from].splice(-step.move)
@@ -244,9 +247,9 @@ Quest: [adventofcode.com/2022/day/6](https://adventofcode.com/2022/day/6)
 
 ```ts
 import { range } from 'lodash'
-import { getLinesFromInput } from '../utils'
+import { getLines } from '../utils'
 
-const signal = getLinesFromInput(__dirname)[0]
+const signal = getLines(__dirname)[0]
 
 function findStartIndex(signal: string, markerLength: number) {
   let regex = '(.)'
@@ -283,9 +286,10 @@ Quest: [adventofcode.com/2022/day/7](https://adventofcode.com/2022/day/7)
 #### Solution
 
 ```ts
-import { asc, add, getLinesFromInput } from '../utils'
+import { add } from 'lodash'
+import { asc, getLines } from '../utils'
 
-const lines = getLinesFromInput(__dirname)
+const lines = getLines(__dirname)
 const fs: Record<string, number> = {}
 const path: string[] = []
 
@@ -328,12 +332,11 @@ Quest: [adventofcode.com/2022/day/8](https://adventofcode.com/2022/day/8)
 #### Solution
 
 ```ts
+import { multiply } from 'lodash'
 import { Cartesian } from '../Cartesian'
-import { getArray2dFromInput, multiply } from '../utils'
+import { getArray2d } from '../utils'
 
-const trees = new Cartesian(
-  getArray2dFromInput(__dirname).map(line => line.map(Number))
-)
+const trees = new Cartesian(getArray2d(__dirname).map(line => line.map(Number)))
 
 let maxScore = -Infinity
 let visibleTrees = 0
@@ -379,10 +382,10 @@ Quest: [adventofcode.com/2022/day/9](https://adventofcode.com/2022/day/9)
 #### Solution
 
 ```ts
-import { range, values } from 'lodash'
-import { getLinesFromInput, last } from '../utils'
+import { range, values, last } from 'lodash'
+import { getLines } from '../utils'
 
-const dirs = getLinesFromInput(__dirname)
+const dirs = getLines(__dirname)
   .map(line => line.split(' '))
   .map(([dir, steps]) => dir.repeat(+steps))
   .join('')
@@ -448,14 +451,14 @@ Quest: [adventofcode.com/2022/day/10](https://adventofcode.com/2022/day/10)
 #### Solution
 
 ```ts
-import { getLinesFromInput, toNumber, inRange, divisible } from '../utils'
+import { getLines, toNumber, inRange, divisible } from '../utils'
 
 let x = 1
 let sum = 0
 let cycle = 0
 let crt = ''
 
-getLinesFromInput(__dirname).forEach(line => {
+getLines(__dirname).forEach(line => {
   exec()
   if (line.startsWith('add')) {
     exec()
@@ -555,9 +558,9 @@ Quest: [adventofcode.com/2022/day/12](https://adventofcode.com/2022/day/12)
 ```ts
 import EasyStar from 'easystarjs'
 import { range } from 'lodash'
-import { getArray2dFromInput, loop2d } from '../utils'
+import { getArray2d, loop2d } from '../utils'
 
-const input = getArray2dFromInput(__dirname)
+const input = getArray2d(__dirname)
 const start = { x: 0, y: 0 }
 const end = { x: 0, y: 0 }
 const lowestPoints: Point[] = []
@@ -592,6 +595,7 @@ loop2d(input, (y, x) => {
 
   const dirs: EasyStar.Direction[] = []
   const current = toHeight(input[y][x])
+
   const up = toHeight(input[y - 1]?.[x])
   const down = toHeight(input[y + 1]?.[x])
   const left = toHeight(input[y][x - 1])

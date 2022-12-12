@@ -1,41 +1,30 @@
 import { readFileSync } from 'fs'
+import { last } from 'lodash'
 import path from 'path'
 
 export function getInput(dirname: string): string {
   return readFileSync(path.join(dirname, 'input.txt')).toString()
 }
 
-export function getLinesFromInput<T extends string>(dirname: string): T[] {
+export function getLines<T extends string>(dirname: string): T[] {
   const lines = getInput(dirname).split('\n') as T[]
-
-  if (last(lines) === '') {
-    lines.pop()
-  }
-
+  if (last(lines) === '') lines.pop()
   return lines
 }
 
-export function getNumbersFromInput(dirname: string): number[] {
-  const lines = getLinesFromInput(dirname)
+export function getNumbers(dirname: string): number[] {
+  const lines = getLines(dirname)
 
   return lines.length === 1
     ? lines[0]!.split(',').map(Number)
-    : getLinesFromInput(dirname).map(line => parseFloat(line))
+    : getLines(dirname).map(line => parseFloat(line))
 }
 
-export function getArray2dFromInput<T extends string>(
+export function getArray2d<T extends string>(
   dirname: string,
   splitBy = ''
 ): T[][] {
-  return getLinesFromInput(dirname).map(line => line.split(splitBy) as T[])
-}
-
-export function add(a: number, b: number): number {
-  return a + b
-}
-
-export function multiply(a: number, b: number): number {
-  return a * b
+  return getLines(dirname).map(line => line.split(splitBy) as T[])
 }
 
 export function asc(a: any, b: any): number {
@@ -50,58 +39,15 @@ export function inRange(min: number, value: number, max: number): boolean {
   return value >= min && value <= max
 }
 
-export function deepCopy<T>(obj: T): T {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-export function rotateClockwise<T>(arr: Array2d<T>): Array2d<T> {
-  const copy = deepCopy<Array2d<T>>(arr)
-  const n = copy.length
-  const x = Math.floor(n / 2)
-  const y = n - 1
-
-  for (let i = 0; i < x; i++) {
-    for (let j = i; j < y - i; j++) {
-      const tmp = copy[i]![j]
-      // @ts-ignore
-      copy[i][j] = copy[y - j][i]
-      // @ts-ignore
-      copy[y - j][i] = copy[y - i][y - j]
-      // @ts-ignore
-      copy[y - i][y - j] = copy[j][y - i]
-      // @ts-ignore
-      copy[j][y - i] = tmp
-    }
-  }
-
-  return copy
-}
-
-export function flipX<T>(arr: Array2d<T>): Array2d<T> {
-  let copy = deepCopy<Array2d<T>>(arr)
-  copy = copy.map(row => row.reverse())
-
-  return copy
-}
-
-export function flipY<T>(arr: Array2d<T>): Array2d<T> {
-  let copy = deepCopy<Array2d<T>>(arr)
-  copy = copy.reverse()
-
-  return copy
-}
-
 export function getManhattanDistance(
-  positionA: Position,
-  positionB: Position = { x: 0, y: 0 }
+  a: Position,
+  b: Position = { x: 0, y: 0 }
 ): number {
-  return (
-    Math.abs(positionA.x - positionB.x) + Math.abs(positionA.y - positionB.y)
-  )
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y)
 }
 
-export function getDistance(positionA: Position, PositionB: Position): number {
-  return Math.hypot(positionA.x - PositionB.x, positionA.y - PositionB.y)
+export function getDistance(a: Position, b: Position): number {
+  return Math.hypot(a.x - b.x, a.y - b.y)
 }
 
 export function match<
@@ -109,10 +55,6 @@ export function match<
   Options extends Record<Variant, () => any>
 >(variant: Variant, options: Options): ReturnType<Options[Variant]> {
   return options[variant]()
-}
-
-export function log(...arg: any[]): void {
-  console.log(...arg)
 }
 
 export function getColumn<T>(array: T[][], columnNumber: number): T[] {
@@ -124,28 +66,6 @@ export function getColumn<T>(array: T[][], columnNumber: number): T[] {
   return column
 }
 
-export function negateFunction(fn: (...arg: any) => boolean): () => boolean {
-  return (...arg) => !fn(...arg)
-}
-
-export function memorize<Fn extends (...args: any[]) => any>(
-  fn: Fn
-): (...args: Parameters<Fn>) => ReturnType<Fn> {
-  const memo = new Map()
-
-  return (...args) => {
-    const uniqKey = JSON.stringify(args)
-
-    if (memo.has(uniqKey)) {
-      return memo.get(uniqKey)
-    } else {
-      const returnValue = fn(...args)
-      memo.set(uniqKey, returnValue)
-      return returnValue
-    }
-  }
-}
-
 export function loop2d<T>(
   array: T[][],
   callback: (y: number, x: number, item: T) => void
@@ -155,10 +75,6 @@ export function loop2d<T>(
       callback(y, x, array[y]![x]!)
     }
   }
-}
-
-export function last<T>(arr: T[]): T | undefined {
-  return arr[arr.length - 1]
 }
 
 export function toNumber(str: string): number {
@@ -187,4 +103,17 @@ export function getLcm(a: number | number[], b?: number): number {
   }
   // @ts-ignore
   return a * (b / getGcd(a, b))
+}
+
+export function adjacentPoints<T>(arr: T[][], x: number, y: number) {
+  return {
+    up: arr[y - 1]?.[x],
+    upRight: arr[y - 1]?.[x + 1],
+    upLeft: arr[y - 1]?.[x - 1],
+    down: arr[y + 1]?.[x],
+    downRight: arr[y + 1]?.[x + 1],
+    downLeft: arr[y + 1]?.[x - 1],
+    left: arr[y][x - 1],
+    right: arr[y][x + 1],
+  }
 }
