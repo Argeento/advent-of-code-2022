@@ -2,9 +2,9 @@ import { chunk, last } from 'lodash'
 import { getLines, toKeys, key, createArray, toNumbers, asc } from '../utils'
 
 enum Unit {
-  AIR = '.',
-  ROCK = '#',
-  SAND = 'o',
+  AIR,
+  ROCK,
+  SAND,
 }
 
 const rocks = getLines(__dirname)
@@ -13,7 +13,7 @@ const rocks = getLines(__dirname)
 
 const maxX = Math.max(...rocks.flatMap(p => p.map(key('x'))))
 const maxY = Math.max(...rocks.flatMap(p => p.map(key('y'))))
-const cave = createArray<Unit>(maxY + 2, maxX * 2, Unit.AIR)
+const cave = createArray(maxY + 2, maxX * 2, Unit.AIR)
 
 // Create rocks
 rocks.forEach(path => {
