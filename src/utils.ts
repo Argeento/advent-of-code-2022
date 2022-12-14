@@ -82,7 +82,7 @@ export function toNumber(str: string): number {
 }
 
 export function toNumbers(str: string): number[] {
-  return (str.match(/\-?\d+((.|,)\d+)?/g) ?? []).map(x => parseFloat(x))
+  return (str.match(/\-?\d+(\.\d+)?/g) ?? []).map(x => parseFloat(x))
 }
 
 export function divisible(a: number, b: number): boolean {
@@ -116,4 +116,36 @@ export function adjacentPoints<T>(arr: T[][], x: number, y: number) {
     left: arr[y][x - 1],
     right: arr[y][x + 1],
   }
+}
+
+export function toKeys<Item, Key extends string>(...keys: Key[]) {
+  return function (item: Item[]) {
+    const obj = {} as Record<Key, Item>
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      obj[key] = item[i]
+    }
+    return obj
+  }
+}
+
+export function key<Key extends PropertyKey, Obj extends Record<Key, any>>(
+  key: Key
+): (obj: Obj) => Obj[Key] {
+  return function (obj: Obj) {
+    return obj[key]
+  }
+}
+
+export function printArray(arr: any[], empty = '.'): void {
+  for (let y = 0; y < arr.length; y++) {
+    for (let x = 400; x < arr[0].length; x++) {
+      process.stdout.write(arr[y][x] ?? empty)
+    }
+    console.log()
+  }
+}
+
+export function createArray<T>(y: number, x: number, fill = '.'): T[][] {
+  return new Array(y).fill(0).map(() => new Array(x).fill(fill))
 }
