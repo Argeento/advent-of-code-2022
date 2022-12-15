@@ -26,6 +26,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 | 12  | [Hill Climbing Algorithm][12] | :star: | :star: |
 | 13  |     [Distress Signal][13]     | :star: | :star: |
 | 14  |   [Regolith Reservoir][14]    | :star: | :star: |
+| 15  |  [Beacon Exclusion Zone][15]  | :star: | :star: |
 
 ## The journey
 
@@ -801,6 +802,77 @@ console.log('Part 2:', p2)
 
 ---
 
+### Day 15: Beacon Exclusion Zone
+
+You feel the ground rumble again as the distress signal leads you to a large network of subterranean tunnels. You don't have time to search them all, but you don't need to: your pack contains a set of deployable sensors that you imagine were originally built to locate lost Elves.
+
+The sensors aren't very powerful, but that's okay; your handheld device indicates that you're close enough to the source of the distress signal to use them. You pull the emergency sensor system out of your pack, hit the big button on top, and the sensors zoom off down the tunnels.
+
+Quest: [adventofcode.com/2022/day/15](https://adventofcode.com/2022/day/15)
+
+#### Solution
+
+```ts
+import { arrayUnion } from 'interval-operations'
+import { getLines, getManhattanDistance, toNumbers } from '../utils'
+
+const P1_Y = 2_000_000
+const P2_LIMIT = 4_000_000
+
+const p1Ranges: [number, number][] = []
+const p2Cols: Record<number, [number, number][]> = {}
+
+getLines(__dirname).map(line => {
+  const [sensorX, sensorY, beaconX, beaconY] = toNumbers(line)
+  const sensor = { x: sensorX, y: sensorY }
+  const beacon = { x: beaconX, y: beaconY }
+  const radius = getManhattanDistance(sensor, beacon)
+  const p1Range: number[] = []
+
+  for (let i = -radius; i <= radius; i++) {
+    const x = sensor.x + i
+    const y1 = sensor.y + radius - Math.abs(i)
+    const y2 = sensor.y + Math.abs(i) - radius
+
+    if (y1 === P1_Y || y2 === P1_Y) {
+      p1Range.push(x)
+    }
+
+    if (
+      (y1 > 0 || y2 > 0) &&
+      (y1 < P2_LIMIT || y2 < P2_LIMIT) &&
+      x < P2_LIMIT &&
+      x >= 0
+    ) {
+      p2Cols[x] ??= []
+      p2Cols[x].push(y1 < y2 ? [y1, y2] : [y2, y1])
+    }
+  }
+
+  if (p1Range.length === 1) {
+    p1Range.push(p1Range[0])
+  }
+
+  if (p1Range.length === 2) {
+    p1Ranges.push(p1Range as [number, number])
+  }
+})
+
+const p1 = arrayUnion(p1Ranges)[0] as number[]
+console.log('Part 1:', p1[1] - p1[0])
+
+for (const x in p2Cols) {
+  const ranges = arrayUnion(p2Cols[x])
+  if (ranges.length > 1) {
+    const y = +ranges[0][1] + 1
+    console.log('Part 2:', +x * P2_LIMIT + y)
+    break
+  }
+}
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -859,3 +931,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [12]: #day-12-hill-climbing-algorithm
 [13]: #day-13-distress-signal
 [14]: #day-14-regolith-reservoir
+[15]: #day-15-beacon-exclusion-zone
