@@ -24,9 +24,9 @@ getLines(__dirname).map(line => {
     }
 
     if (
-      (y1 > 0 || y2 > 0) &&
-      (y1 < P2_LIMIT || y2 < P2_LIMIT) &&
-      x < P2_LIMIT &&
+      (y1 >= 0 || y2 >= 0) &&
+      (y1 <= P2_LIMIT || y2 <= P2_LIMIT) &&
+      x <= P2_LIMIT &&
       x >= 0
     ) {
       p2Cols[x] ??= []
