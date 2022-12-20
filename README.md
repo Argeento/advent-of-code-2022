@@ -27,6 +27,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 | 13  |     [Distress Signal][13]     | :star: | :star: |
 | 14  |   [Regolith Reservoir][14]    | :star: | :star: |
 | 15  |  [Beacon Exclusion Zone][15]  | :star: | :star: |
+| 16  |  [Proboscidea Volcanium][16]  | :star: | :star: |
 
 ## The journey
 
@@ -873,6 +874,114 @@ for (const x in p2Cols) {
 
 ---
 
+### Day 16: Proboscidea Volcanium
+
+The sensors have led you to the origin of the distress signal: yet another handheld device, just like the one the Elves gave you. However, you don't see any Elves around; instead, the device is surrounded by elephants! They must have gotten lost in these tunnels, and one of the elephants apparently figured out how to turn on the distress signal.
+
+The ground rumbles again, much stronger this time. What kind of cave is this, exactly? You scan the cave with your handheld device; it reports mostly igneous rock, some ash, pockets of pressurized gas, magma... this isn't just a cave, it's a volcano!
+
+You need to get the elephants out of here, quickly. Your device estimates that you have 30 minutes before the volcano erupts, so you don't have time to go back out the way you came in.
+
+Quest: [adventofcode.com/2022/day/16](https://adventofcode.com/2022/day/16)
+
+#### Solution
+
+```ts
+import { getLines, toNumber } from '../utils'
+import Graph from 'node-dijkstra'
+import combinations from 'combinations'
+import memoizee from 'memoizee'
+
+console.time('time')
+
+type Costs = Record<string, Record<string, number>>
+type Valve = {
+  name: string
+  flow: number
+  tunnels: string[]
+}
+
+const flowRateMap: Record<string, number> = {}
+const valves = getLines(__dirname).map(line => {
+  const [name, ...tunnels] = line.match(/[A-Z]{2}/g)!
+  const flow = toNumber(line)
+  flowRateMap[name] = flow
+  return { name, flow, tunnels }
+})
+
+const tunnelsRoute = new Graph()
+valves.forEach(valve => {
+  const edges = valve.tunnels.reduce(
+    (obj, tunnel) => ({ ...obj, [tunnel]: 1 }),
+    {}
+  )
+  tunnelsRoute.addNode(valve.name, edges)
+})
+
+const aaValve = valves.find(valve => valve.name === 'AA')!
+const everyFlowValve = valves.filter(valve => valve.flow)
+const getPathWeight = memoizee((from: string, to: string) => {
+  const path = tunnelsRoute.path(from, to) as string[]
+  return path.length - 1
+})
+
+function createCosts(valves: Valve[]) {
+  valves = [aaValve, ...valves]
+  const costs: Record<string, Record<string, number>> = {}
+
+  for (let i = 0; i < valves.length; i++) {
+    const from = valves[i]
+    const restValves = valves.filter(v => v !== from)
+    for (const to of restValves) {
+      costs[from.name] ??= {}
+      costs[from.name][to.name] = getPathWeight(from.name, to.name)
+    }
+  }
+
+  return costs
+}
+
+function best(
+  costs: Costs,
+  time: number,
+  current: string = 'AA',
+  open: string[] = []
+): number {
+  if (time === 0) return 0
+
+  const results = Object.keys(costs[current])
+    .filter(destination => {
+      return !open.includes(destination) && time > costs[current][destination]
+    })
+    .map(dest => {
+      const remaining = time - costs[current][dest] - 1
+      const pressure = remaining * flowRateMap[dest]
+      return pressure + best(costs, remaining, dest, [dest, ...open])
+    })
+
+  return Math.max(0, ...results)
+}
+
+const p1Costs = createCosts(everyFlowValve)
+console.log('Part 1:', best(p1Costs, 30))
+console.timeLog('time')
+
+const allPerm = combinations(everyFlowValve, 3, everyFlowValve.length / 2)
+let max = -Infinity
+for (const player of allPerm) {
+  const elephant = everyFlowValve.filter(valve => !player.includes(valve))
+  const sum = best(createCosts(player), 26) + best(createCosts(elephant), 26)
+  if (sum > max) {
+    max = sum
+  }
+}
+
+console.log('Part 2:', max)
+console.timeEnd('time')
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -932,3 +1041,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [13]: #day-13-distress-signal
 [14]: #day-14-regolith-reservoir
 [15]: #day-15-beacon-exclusion-zone
+[16]: #day-16-proboscidea-volcanium

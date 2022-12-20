@@ -23,21 +23,27 @@
   },
   "homepage": "https://github.com/Argeento/advent-of-code-2022#readme",
   "dependencies": {
+    "@types/memoizee": "^0.4.8",
     "@types/node": "^18.11.10",
     "chalk": "^4.1.2",
+    "combinations": "^1.0.0",
     "easystarjs": "^0.4.4",
     "interval-operations": "^1.0.7",
     "lodash": "^4.17.21",
     "markdown-table": "^2.0.0",
+    "memoizee": "^0.4.15",
+    "node-dijkstra": "^2.5.0",
     "prettier": "^2.8.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
+    "@types/combinations": "^1.0.0",
     "@types/jest": "^29.2.4",
     "@types/lodash": "^4.14.191",
     "@types/markdown-table": "^2.0.0",
+    "@types/node-dijkstra": "^2.5.3",
     "@types/prettier": "^2.7.1",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3"
