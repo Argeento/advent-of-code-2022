@@ -137,6 +137,6 @@ const rocksBeforeCycle = createCave({ height: start }).rocks
 const rocksAfterFirstCycle = createCave({ height: start + cycleHeight }).rocks
 const rocksToCreateCycle = rocksAfterFirstCycle - rocksBeforeCycle
 const repeats = Math.floor((allRocks - rocksBeforeCycle) / rocksToCreateCycle)
-const iterationsLeft = allRocks - repeats * rocksToCreateCycle
-const heightWithoutCycles = createCave({ rocks: iterationsLeft }).height
+const rocksLeft = allRocks - repeats * rocksToCreateCycle
+const heightWithoutCycles = createCave({ rocks: rocksLeft }).height
 console.log('Part 2', heightWithoutCycles + cycleHeight * repeats)
