@@ -12,3 +12,7 @@ interface Position3d extends Position {
 
 interface Point extends Position {}
 interface Point3d extends Position3d {}
+
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: DeepReadonly<T[P]>
+}
