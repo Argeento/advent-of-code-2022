@@ -10,27 +10,28 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 
 ## Star fruits
 
-| Day |             Quest             | Part 1 | Part 2 |
-| :-: | :---------------------------: | :----: | :----: |
-|  1  |     [Calorie Counting][1]     | :star: | :star: |
-|  2  |   [Rock Paper Scissors][2]    | :star: | :star: |
-|  3  | [Rucksack Reorganization][3]  | :star: | :star: |
-|  4  |       [Camp Cleanup][4]       | :star: | :star: |
-|  5  |      [Supply Stacks][5]       | :star: | :star: |
-|  6  |      [Tuning Trouble][6]      | :star: | :star: |
-|  7  | [No Space Left On Device][7]  | :star: | :star: |
-|  8  |    [Treetop Tree House][8]    | :star: | :star: |
-|  9  |       [Rope Bridge][9]        | :star: | :star: |
-| 10  |    [Cathode-Ray Tube][10]     | :star: | :star: |
-| 11  |  [Monkey in the Middle][11]   | :star: | :star: |
-| 12  | [Hill Climbing Algorithm][12] | :star: | :star: |
-| 13  |     [Distress Signal][13]     | :star: | :star: |
-| 14  |   [Regolith Reservoir][14]    | :star: | :star: |
-| 15  |  [Beacon Exclusion Zone][15]  | :star: | :star: |
-| 16  |  [Proboscidea Volcanium][16]  | :star: | :star: |
-| 17  |    [Pyroclastic Flow][17]     | :star: | :star: |
-| 18  |    [Boiling Boulders][18]     | :star: | :star: |
-| 19  |   [Not Enough Minerals][19]   | :star: | :star: |
+| Day |             Quest              | Part 1 | Part 2 |
+| :-: | :----------------------------: | :----: | :----: |
+|  1  |     [Calorie Counting][1]      | :star: | :star: |
+|  2  |    [Rock Paper Scissors][2]    | :star: | :star: |
+|  3  |  [Rucksack Reorganization][3]  | :star: | :star: |
+|  4  |       [Camp Cleanup][4]        | :star: | :star: |
+|  5  |       [Supply Stacks][5]       | :star: | :star: |
+|  6  |      [Tuning Trouble][6]       | :star: | :star: |
+|  7  |  [No Space Left On Device][7]  | :star: | :star: |
+|  8  |    [Treetop Tree House][8]     | :star: | :star: |
+|  9  |        [Rope Bridge][9]        | :star: | :star: |
+| 10  |     [Cathode-Ray Tube][10]     | :star: | :star: |
+| 11  |   [Monkey in the Middle][11]   | :star: | :star: |
+| 12  | [Hill Climbing Algorithm][12]  | :star: | :star: |
+| 13  |     [Distress Signal][13]      | :star: | :star: |
+| 14  |    [Regolith Reservoir][14]    | :star: | :star: |
+| 15  |  [Beacon Exclusion Zone][15]   | :star: | :star: |
+| 16  |  [Proboscidea Volcanium][16]   | :star: | :star: |
+| 17  |     [Pyroclastic Flow][17]     | :star: | :star: |
+| 18  |     [Boiling Boulders][18]     | :star: | :star: |
+| 19  |   [Not Enough Minerals][19]    | :star: | :star: |
+| 20  | [Grove Positioning System][20] | :star: | :star: |
 
 ## The journey
 
@@ -1408,6 +1409,54 @@ console.log('Part 2:', p2Product)
 
 ---
 
+### Day 20: Grove Positioning System
+
+It's finally time to meet back up with the Elves. When you try to contact them, however, you get no reply. Perhaps you're out of range?
+
+You know they're headed to the grove where the star fruit grows, so if you can figure out where that is, you should be able to meet back up with them.
+
+Fortunately, your handheld device has a file (your puzzle input) that contains the grove's coordinates! Unfortunately, the file is encrypted - just in case the device were to fall into the wrong hands.
+
+Maybe you can decrypt it?
+
+Quest: [adventofcode.com/2022/day/20](https://adventofcode.com/2022/day/20)
+
+#### Solution
+
+```ts
+import { getLines, toKeys, toNumbers } from '../utils'
+
+const input = getLines(__dirname).map(toNumbers).map(toKeys('value'))
+const refsOrder = [...input]
+
+function getSum(mixes: number, multiplier: number) {
+  const refs = [...input]
+
+  for (let i = 0; i < mixes; i++) {
+    for (let j = 0; j < refs.length; j++) {
+      const index = refs.indexOf(refsOrder[j])
+      const ref = refs.splice(index, 1)[0]
+      let newIndex = (index + ref.value * multiplier) % refs.length
+      refs.splice(newIndex, 0, ref)
+      if (newIndex === 0) refs.push(refs.shift()!)
+    }
+  }
+
+  let sum = 0
+  let zeroIndex = refs.findIndex(ref => ref.value === 0)
+  for (let i = 1000; i <= 3000; i += 1000) {
+    sum += refs[(zeroIndex + i) % refs.length].value * multiplier
+  }
+
+  return sum
+}
+
+console.log('Part 1:', getSum(1, 1))
+console.log('Part 2:', getSum(10, 811589153))
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -1471,3 +1520,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [17]: #day-17-pyroclastic-flow
 [18]: #day-18-boiling-boulders
 [19]: #day-19-not-enough-minerals
+[20]: #day-20-grove-positioning-system
