@@ -29,6 +29,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 | 15  |  [Beacon Exclusion Zone][15]  | :star: | :star: |
 | 16  |  [Proboscidea Volcanium][16]  | :star: | :star: |
 | 17  |    [Pyroclastic Flow][17]     | :star: | :star: |
+| 18  |    [Boiling Boulders][18]     | :star: | :star: |
 
 ## The journey
 
@@ -1140,6 +1141,91 @@ console.log('Part 2', heightWithoutCycles + cycleHeight * repeats)
 
 ---
 
+### Day 18: Boiling Boulders
+
+ou and the elephants finally reach fresh air. You've emerged near the base of a large volcano that seems to be actively erupting! Fortunately, the lava seems to be flowing away from you and toward the ocean.
+
+Bits of lava are still being ejected toward you, so you're sheltering in the cavern exit a little longer. Outside the cave, you can see the lava landing in a pond and hear it loudly hissing as it solidifies.
+
+Depending on the specific compounds in the lava and speed at which it cools, it might be forming obsidian! The cooling rate should be based on the surface area of the lava droplets, so you take a quick scan of a droplet as it flies past you
+
+Quest: [adventofcode.com/2022/day/18](https://adventofcode.com/2022/day/18)
+
+#### Solution
+
+```ts
+import { add, negate } from 'lodash'
+import { getLines, toNumbers } from '../utils'
+import Graph from 'node-dijkstra'
+import memoizee from 'memoizee'
+
+const cubes = getLines(__dirname).map(toNumbers)
+const lavaMap: Record<string, boolean> = {}
+
+cubes.forEach(cube => {
+  lavaMap[cube.toString()] = true
+})
+
+const isLava = (point: number[]) => !!lavaMap[point.toString()]
+const isAir = negate(isLava)
+const countLavaSides = memoizee(([x, y, z]: number[]) => {
+  let sides = 0
+  if (isLava([x + 1, y, z])) sides++
+  if (isLava([x - 1, y, z])) sides++
+  if (isLava([x, y + 1, z])) sides++
+  if (isLava([x, y - 1, z])) sides++
+  if (isLava([x, y, z + 1])) sides++
+  if (isLava([x, y, z - 1])) sides++
+  return sides
+})
+
+const p1Surface = cubes
+  .map(countLavaSides)
+  .map(sides => 6 - sides)
+  .reduce(add)
+
+console.log('Part 1:', p1Surface)
+
+const airGraph = new Graph()
+const volumeSide = Math.max(...cubes.flatMap(x => x)) + 2
+
+for (let z = 0; z < volumeSide; z++) {
+  for (let y = 0; y < volumeSide; y++) {
+    for (let x = 0; x < volumeSide; x++) {
+      const point = [x, y, z]
+      if (isAir(point)) {
+        const routes: Record<string, 1> = {}
+        if (isAir([x + 1, y, z])) routes[[x + 1, y, z].toString()] = 1
+        if (isAir([x - 1, y, z])) routes[[x - 1, y, z].toString()] = 1
+        if (isAir([x, y + 1, z])) routes[[x, y + 1, z].toString()] = 1
+        if (isAir([x, y - 1, z])) routes[[x, y - 1, z].toString()] = 1
+        if (isAir([x, y, z + 1])) routes[[x, y, z + 1].toString()] = 1
+        if (isAir([x, y, z - 1])) routes[[x, y, z - 1].toString()] = 1
+        airGraph.addNode(point.toString(), routes)
+      }
+    }
+  }
+}
+
+const freeAirPoint = [volumeSide - 1, volumeSide - 1, volumeSide - 1].toString()
+let insideEdges = 0
+
+for (let z = 0; z < volumeSide; z++) {
+  for (let y = 0; y < volumeSide; y++) {
+    for (let x = 0; x < volumeSide; x++) {
+      const point = [x, y, z]
+      if (isAir(point) && !airGraph.path(point.toString(), freeAirPoint)) {
+        insideEdges += countLavaSides(point)
+      }
+    }
+  }
+}
+
+console.log('Part 2:', p1Surface - insideEdges)
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -1201,3 +1287,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [15]: #day-15-beacon-exclusion-zone
 [16]: #day-16-proboscidea-volcanium
 [17]: #day-17-pyroclastic-flow
+[18]: #day-18-boiling-boulders
