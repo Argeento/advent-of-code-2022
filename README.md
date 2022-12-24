@@ -32,6 +32,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 | 18  |     [Boiling Boulders][18]     | :star: | :star: |
 | 19  |   [Not Enough Minerals][19]    | :star: | :star: |
 | 20  | [Grove Positioning System][20] | :star: | :star: |
+| 21  |       [Monkey Math][21]        | :star: | :star: |
 
 ## The journey
 
@@ -1457,6 +1458,30 @@ console.log('Part 2:', getSum(10, 811589153))
 
 ---
 
+### Day 21: Monkey Math
+
+The monkeys are back! You're worried they're going to try to steal your stuff again, but it seems like they're just holding their ground and making various monkey noises at you.
+
+Eventually, one of the elephants realizes you don't speak monkey and comes over to interpret. As it turns out, they overheard you talking about trying to find the grove; they can show you a shortcut if you answer their riddle.
+
+(Part 2 in `/src/21/p2.ts` file)
+
+Quest: [adventofcode.com/2022/day/21](https://adventofcode.com/2022/day/21)
+
+#### Solution
+
+```ts
+// @ts-nocheck
+import { getLines } from '../utils'
+
+// prettier-ignore
+while (!global.root || console.log(root))
+  for (let x of getLines(__dirname))
+    try { eval('global.' + x.replace(...':=')) } catch (_) {}
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -1521,3 +1546,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [18]: #day-18-boiling-boulders
 [19]: #day-19-not-enough-minerals
 [20]: #day-20-grove-positioning-system
+[21]: #day-21-monkey-math
