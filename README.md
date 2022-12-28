@@ -36,6 +36,7 @@ To supply enough magical energy, the expedition needs to retrieve a minimum of f
 | 22  |        [Monkey Map][22]        | :star: | :star: |
 | 23  |    [Unstable Diffusion][23]    | :star: | :star: |
 | 24  |      [Blizzard Basin][24]      | :star: | :star: |
+| 25  |     [Full of Hot Air][25]      | :star: | :star: |
 
 ## The journey
 
@@ -2109,6 +2110,53 @@ console.log('Part 2:', firstTripTime + tripBackTime + backToGoalTime)
 
 ---
 
+### Day 25: Full of Hot Air
+
+As the expedition finally reaches the extraction point, several large hot air balloons drift down to meet you. Crews quickly start unloading the equipment the balloons brought: many hot air balloon kits, some fuel tanks, and a fuel heating machine.
+
+The fuel heating machine is a new addition to the process. When this mountain was a volcano, the ambient temperature was more reasonable; now, it's so cold that the fuel won't work at all without being warmed up first.
+
+Quest: [adventofcode.com/2022/day/25](https://adventofcode.com/2022/day/25)
+
+#### Solution
+
+```ts
+import { add } from 'lodash'
+import { getLines } from '../utils'
+
+const input = getLines(__dirname)
+
+function toDec(snafu: string) {
+  return [...snafu]
+    .reverse()
+    .map(char => char.replace('-', '-1').replace('=', '-2'))
+    .map((char, i) => parseInt(char) * 5 ** i)
+    .reduce(add)
+}
+
+function toSnafu(nr: number) {
+  const snafu = [...nr.toString(5)].map(Number).reverse()
+
+  snafu.forEach((x, i) => {
+    if (x > 2) {
+      snafu[i] -= 5
+      snafu[i + 1] ??= 0
+      snafu[i + 1] += 1
+    }
+  })
+
+  return snafu
+    .reverse()
+    .map(x => '=-012'[x + 2])
+    .join('')
+}
+
+const fuel = input.map(toDec).reduce(add)
+console.log('Part 1:', toSnafu(fuel))
+```
+
+---
+
 ## How to run?
 
 Requirements:
@@ -2177,3 +2225,4 @@ Community Managers: [Danielle Lucek](https://reddit.com/message/compose/?to=/r/a
 [22]: #day-22-monkey-map
 [23]: #day-23-unstable-diffusion
 [24]: #day-24-blizzard-basin
+[25]: #day-25-full-of-hot-air
