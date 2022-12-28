@@ -149,3 +149,5 @@ export function printArray(arr: any[], empty = '.'): void {
 export function createArray<T>(y: number, x: number, fill: T): T[][] {
   return new Array(y).fill(0).map(() => new Array(x).fill(fill))
 }
+
+export function exhaustiveCheck(arg: never): void {}
